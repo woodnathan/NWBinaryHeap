@@ -64,7 +64,7 @@
     [heap addObject:@2];
     [heap addObject:@3];
     
-    XCTAssertEqualObjects(@1, [heap topObject], @"Top item should be 3");
+    XCTAssertEqualObjects(@1, [heap topObject], @"Top item should be 1");
 }
 
 - (void)testExtract
@@ -76,8 +76,8 @@
     [heap addObject:@3];
     
     XCTAssertEqualObjects(@3, [heap removeTopObject], @"Top item should be 3");
-    XCTAssertEqualObjects(@2, [heap removeTopObject], @"Top item should be 3");
-    XCTAssertEqualObjects(@1, [heap removeTopObject], @"Top item should be 3");
+    XCTAssertEqualObjects(@2, [heap removeTopObject], @"Top item should be 2");
+    XCTAssertEqualObjects(@1, [heap removeTopObject], @"Top item should be 1");
     XCTAssertEqualObjects(nil, [heap removeTopObject], @"Top item should be nil");
 }
 
@@ -89,8 +89,8 @@
     [heap addObject:@2];
     [heap addObject:@1];
     
-    XCTAssertEqualObjects(@1, [heap removeTopObject], @"Top item should be 3");
-    XCTAssertEqualObjects(@2, [heap removeTopObject], @"Top item should be 3");
+    XCTAssertEqualObjects(@1, [heap removeTopObject], @"Top item should be 1");
+    XCTAssertEqualObjects(@2, [heap removeTopObject], @"Top item should be 2");
     XCTAssertEqualObjects(@3, [heap removeTopObject], @"Top item should be 3");
     XCTAssertEqualObjects(nil, [heap removeTopObject], @"Top item should be nil");
 }
