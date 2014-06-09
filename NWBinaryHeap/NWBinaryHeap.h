@@ -23,11 +23,15 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSUInteger, NWBinaryHeapType) {
+    NWBinaryHeapMaximum = 0,
+    NWBinaryHeapMinimum
+};
+
 @interface NWBinaryHeap : NSObject
 
-+ (instancetype)minimumHeap;
-
 - (instancetype)init;
+- (instancetype)initWithType:(NWBinaryHeapType)type;
 
 @property (nonatomic, readonly, getter = isEmpty) BOOL empty;
 

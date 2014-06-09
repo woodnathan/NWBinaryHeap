@@ -69,13 +69,16 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
 
 @implementation NWBinaryHeap
 
-+ (instancetype)minimumHeap
-{
-    return [[NWMinimumBinaryHeap alloc] init];
-}
-
 - (instancetype)init
 {
+    return [self initWithType:NWBinaryHeapMaximum];
+}
+
+- (instancetype)initWithType:(NWBinaryHeapType)type
+{
+    if (type == NWBinaryHeapMinimum)
+        return [[NWMinimumBinaryHeap alloc] init];
+    
     self = [super init];
     if (self)
     {
@@ -83,6 +86,8 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
     }
     return self;
 }
+
+#pragma mark Checking Methods
 
 - (BOOL)isEmpty
 {

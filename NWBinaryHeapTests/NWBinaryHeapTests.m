@@ -58,7 +58,7 @@
 
 - (void)testInsertMinimum
 {
-    NWBinaryHeap *heap = [NWBinaryHeap minimumHeap];
+    NWBinaryHeap *heap = [[NWBinaryHeap alloc] initWithType:NWBinaryHeapMinimum];
     
     [heap addObject:@1 withKey:@1];
     [heap addObject:@2 withKey:@2];
@@ -83,7 +83,7 @@
 
 - (void)testExtractMinimum
 {
-    NWBinaryHeap *heap = [NWBinaryHeap minimumHeap];
+    NWBinaryHeap *heap = [[NWBinaryHeap alloc] initWithType:NWBinaryHeapMinimum];
     
     [heap addObject:@3 withKey:@3];
     [heap addObject:@2 withKey:@2];
