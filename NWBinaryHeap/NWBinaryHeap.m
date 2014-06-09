@@ -25,36 +25,27 @@
 
 @interface NWBHeapNode : NSObject
 
-+ (instancetype)nodeWithKey:(id)key value:(id)value;
-- (instancetype)initWithKey:(id)key value:(id)value;
++ (instancetype)nodeWithObject:(id)object;
+- (instancetype)initWithObject:(id)object;
 
-@property (nonatomic, strong) id key;
-@property (nonatomic, strong) id value;
+@property (nonatomic, strong) id object;
 
 @property (nonatomic, weak) NWBHeapNode *parent;
 @property (nonatomic, strong) NWBHeapNode *leftChild;
 @property (nonatomic, strong) NWBHeapNode *rightChild;
 
-/**
- *  @return NSOrderedAscending if the key of otherNode is greater than the
- *          receiver’s, NSOrderedSame if they’re equal, and NSOrderedDescending
- *          if the key of otherNode is less than the receiver’s.
- */
-- (NSComparisonResult)compare:(NWBHeapNode *)otherNode;
-
 @end
 
 static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
 {
-    id tKey = a.key;
-    id tValue = a.value;
-    a.key = b.key;
-    a.value = b.value;
-    b.key = tKey;
-    b.value = tValue;
+    id temp = a.object;
+    a.object = b.object;
+    b.object = temp;
 }
 
 @interface NWBinaryHeap ()
+
+@property (nonatomic, copy) NSComparator comparator;
 
 @property (nonatomic, strong) NWBHeapNode *rootNode;
 @property (nonatomic, weak) NWBHeapNode *lastInsertedNode;
@@ -76,13 +67,24 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
 
 - (instancetype)initWithType:(NWBinaryHeapType)type
 {
-    if (type == NWBinaryHeapMinimum)
-        return [[NWMinimumBinaryHeap alloc] init];
+    return [self initWithType:type comparator:nil];
+}
+
+- (instancetype)initWithType:(NWBinaryHeapType)type comparator:(NSComparator)comparator
+{
+    if (type == NWBinaryHeapMinimum && [self isMemberOfClass:[NWBinaryHeap class]])
+        return [[NWMinimumBinaryHeap alloc] initWithType:NWBinaryHeapMinimum comparator:comparator];
     
     self = [super init];
     if (self)
     {
-        
+        if (comparator == nil)
+        {
+            comparator = ^(id obj1, id obj2) {
+                return [obj1 compare:obj2];
+            };
+        }
+        self.comparator = comparator;
     }
     return self;
 }
@@ -94,9 +96,14 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
     return (self.rootNode == nil);
 }
 
+- (NSComparisonResult)compare:(NWBHeapNode *)nodeA to:(NWBHeapNode *)nodeB
+{
+    return self.comparator(nodeA.object, nodeB.object);
+}
+
 - (BOOL)node:(NWBHeapNode *)nodeA isGreaterThan:(NWBHeapNode *)nodeB
 {
-    return ([nodeA compare:nodeB] > NSOrderedSame); // NSOrderedDescending
+    return ([self compare:nodeA to:nodeB] == NSOrderedDescending);
 }
 
 #pragma mark
@@ -129,9 +136,9 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
     self.lastInsertedNode = node;
 }
 
-- (void)addObject:(id)object withKey:(id)key
+- (void)addObject:(id)object
 {
-    NWBHeapNode *node = [NWBHeapNode nodeWithKey:key value:object];
+    NWBHeapNode *node = [NWBHeapNode nodeWithObject:object];
     [self insertNode:node];
     
     [self heapifyUp:node];
@@ -158,7 +165,7 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
     if ([self isEmpty])
         return nil;
     
-    return self.rootNode.value;
+    return self.rootNode.object;
 }
 
 - (id)removeTopObject
@@ -202,7 +209,7 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
     
     [self heapifyDown:rootNode];
     
-    return prevRootNode.value;
+    return prevRootNode.object;
 }
 
 - (void)heapifyDown:(NWBHeapNode *)node
@@ -241,27 +248,19 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
 
 @implementation NWBHeapNode
 
-+ (instancetype)nodeWithKey:(id)key value:(id)value
++ (instancetype)nodeWithObject:(id)object
 {
-    return [[self alloc] initWithKey:key value:value];
+    return [[self alloc] initWithObject:object];
 }
 
-- (instancetype)initWithKey:(id)key value:(id)value
+- (instancetype)initWithObject:(id)object
 {
     self = [super init];
     if (self)
     {
-        NSAssert([key respondsToSelector:@selector(compare:)], @"Key must implement -compare:");
-        
-        self.key = key;
-        self.value = value;
+        self.object = object;
     }
     return self;
-}
-
-- (NSComparisonResult)compare:(NWBHeapNode *)otherNode
-{
-    return [self.key compare:otherNode.key];
 }
 
 #pragma mark Accessors
@@ -308,7 +307,7 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
  */
 - (BOOL)node:(NWBHeapNode *)nodeA isGreaterThan:(NWBHeapNode *)nodeB
 {
-    return ([nodeA compare:nodeB] < NSOrderedSame); // NSOrderedAscending
+    return ([self compare:nodeA to:nodeB] == NSOrderedAscending);
 }
 
 @end

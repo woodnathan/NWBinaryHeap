@@ -32,10 +32,11 @@ typedef NS_ENUM(NSUInteger, NWBinaryHeapType) {
 
 - (instancetype)init;
 - (instancetype)initWithType:(NWBinaryHeapType)type;
+- (instancetype)initWithType:(NWBinaryHeapType)type comparator:(NSComparator)comparator;
 
 @property (nonatomic, readonly, getter = isEmpty) BOOL empty;
 
-- (void)addObject:(id)object withKey:(id)key;
+- (void)addObject:(id)object;
 - (id)topObject;
 - (id)removeTopObject;
 
