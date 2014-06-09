@@ -31,8 +31,8 @@
 
 @property (nonatomic, readonly, getter = isEmpty) BOOL empty;
 
-- (void)insertObject:(id)object withKey:(id)key;
-- (id)examine;
-- (id)extract;
+- (void)addObject:(id)object withKey:(id)key;
+- (id)topObject;
+- (id)removeTopObject;
 
 @end

@@ -36,12 +36,12 @@
     
     XCTAssertTrue([heap isEmpty], @"New heap should be empty");
     
-    [heap insertObject:@1 withKey:@1];
+    [heap addObject:@1 withKey:@1];
     
     XCTAssertFalse([heap isEmpty], @"Heap should not be empty after insertion");
-    XCTAssertEqualObjects(@1, [heap examine], @"Top item should be 1");
+    XCTAssertEqualObjects(@1, [heap topObject], @"Top item should be 1");
     
-    XCTAssertEqualObjects(@1, [heap extract], @"Extracted item should be 1");
+    XCTAssertEqualObjects(@1, [heap removeTopObject], @"Extracted item should be 1");
     XCTAssertTrue([heap isEmpty], @"Heap after extraction should be empty");
 }
 
@@ -49,50 +49,50 @@
 {
     NWBinaryHeap *heap = [[NWBinaryHeap alloc] init];
     
-    [heap insertObject:@1 withKey:@1];
-    [heap insertObject:@2 withKey:@2];
-    [heap insertObject:@3 withKey:@3];
+    [heap addObject:@1 withKey:@1];
+    [heap addObject:@2 withKey:@2];
+    [heap addObject:@3 withKey:@3];
     
-    XCTAssertEqualObjects(@3, [heap examine], @"Top item should be 3");
+    XCTAssertEqualObjects(@3, [heap topObject], @"Top item should be 3");
 }
 
 - (void)testInsertMinimum
 {
     NWBinaryHeap *heap = [NWBinaryHeap minimumHeap];
     
-    [heap insertObject:@1 withKey:@1];
-    [heap insertObject:@2 withKey:@2];
-    [heap insertObject:@3 withKey:@3];
+    [heap addObject:@1 withKey:@1];
+    [heap addObject:@2 withKey:@2];
+    [heap addObject:@3 withKey:@3];
     
-    XCTAssertEqualObjects(@1, [heap examine], @"Top item should be 3");
+    XCTAssertEqualObjects(@1, [heap topObject], @"Top item should be 3");
 }
 
 - (void)testExtract
 {
     NWBinaryHeap *heap = [[NWBinaryHeap alloc] init];
     
-    [heap insertObject:@1 withKey:@1];
-    [heap insertObject:@2 withKey:@2];
-    [heap insertObject:@3 withKey:@3];
+    [heap addObject:@1 withKey:@1];
+    [heap addObject:@2 withKey:@2];
+    [heap addObject:@3 withKey:@3];
     
-    XCTAssertEqualObjects(@3, [heap extract], @"Top item should be 3");
-    XCTAssertEqualObjects(@2, [heap extract], @"Top item should be 3");
-    XCTAssertEqualObjects(@1, [heap extract], @"Top item should be 3");
-    XCTAssertEqualObjects(nil, [heap extract], @"Top item should be nil");
+    XCTAssertEqualObjects(@3, [heap removeTopObject], @"Top item should be 3");
+    XCTAssertEqualObjects(@2, [heap removeTopObject], @"Top item should be 3");
+    XCTAssertEqualObjects(@1, [heap removeTopObject], @"Top item should be 3");
+    XCTAssertEqualObjects(nil, [heap removeTopObject], @"Top item should be nil");
 }
 
 - (void)testExtractMinimum
 {
     NWBinaryHeap *heap = [NWBinaryHeap minimumHeap];
     
-    [heap insertObject:@3 withKey:@3];
-    [heap insertObject:@2 withKey:@2];
-    [heap insertObject:@1 withKey:@1];
+    [heap addObject:@3 withKey:@3];
+    [heap addObject:@2 withKey:@2];
+    [heap addObject:@1 withKey:@1];
     
-    XCTAssertEqualObjects(@1, [heap extract], @"Top item should be 3");
-    XCTAssertEqualObjects(@2, [heap extract], @"Top item should be 3");
-    XCTAssertEqualObjects(@3, [heap extract], @"Top item should be 3");
-    XCTAssertEqualObjects(nil, [heap extract], @"Top item should be nil");
+    XCTAssertEqualObjects(@1, [heap removeTopObject], @"Top item should be 3");
+    XCTAssertEqualObjects(@2, [heap removeTopObject], @"Top item should be 3");
+    XCTAssertEqualObjects(@3, [heap removeTopObject], @"Top item should be 3");
+    XCTAssertEqualObjects(nil, [heap removeTopObject], @"Top item should be nil");
 }
 
 @end

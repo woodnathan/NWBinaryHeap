@@ -124,7 +124,7 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
     self.lastInsertedNode = node;
 }
 
-- (void)insertObject:(id)object withKey:(id)key
+- (void)addObject:(id)object withKey:(id)key
 {
     NWBHeapNode *node = [NWBHeapNode nodeWithKey:key value:object];
     [self insertNode:node];
@@ -148,17 +148,19 @@ static inline void NWBHeapNodeSwap(NWBHeapNode *a, NWBHeapNode *b)
     }
 }
 
-- (id)examine
+- (id)topObject
 {
     if ([self isEmpty])
         return nil;
+    
     return self.rootNode.value;
 }
 
-- (id)extract
+- (id)removeTopObject
 {
     if ([self isEmpty])
         return nil;
+    
     NWBHeapNode *const prevRootNode = self.rootNode;
     NWBHeapNode *lastInsertedNode = self.lastInsertedNode;
     NWBHeapNode *rootNode = lastInsertedNode;
